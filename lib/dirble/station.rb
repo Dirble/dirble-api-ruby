@@ -2,11 +2,10 @@ require 'iso_country_codes'
 
 module Dirble
   class Station
-    REQUIRED_FIELDS = [:name, :website, :directory]
 
     extend Dirble::SimpleApiModel
 
-    attr_accessor :id, :name, :stream_url, :description, :website, :url_id,
+    attr_accessor :id, :name, :streams, :description, :website, :url_id,
                   :categories, :country, :bitrate, :status
     attr_reader :song_history
 
@@ -20,11 +19,6 @@ module Dirble
     end
 
     private
-
-    def song_history=(list_of_songs)
-      @song_history ||= Dirble::Song.factory(list_of_songs)
-    end
-
     class << self
       def find(station_id)
         call_api_with_results(
@@ -47,10 +41,10 @@ module Dirble
         )
       end
 
-      def song_history(station_id)
+      def similar(station_id)
         call_api_with_results(
           request_type: :get,
-          query: "station/#{station_id}/song_history?token={{api_key}}"
+          query: "station/#{station_id}/similar?token={{api_key}}"
         )
       end
 
