@@ -92,25 +92,13 @@ Now you are ready to go.
 
   `Dirbel::Station.by_country_name('United States')`
 
-* Stations amount. Check currently registered stations in Dirble.
-
-  `Dirble::Station.count`
-
 * Find station by id
 
   `Dirble::Station.find(100)`
 
-* Adding new station to directory (website, name and directory are
-  required fields)
+* Get similar stations
 
-```ruby
-      params_for_creation = {
-        name: 'New station',
-        website: 'www.new-station.com',
-        directory: 'Pop'
-      }
-      Dirble::Station.create(params_for_creation)
-```
+  `Dirble::Station.similar(100)`
 
 * Station details
 
