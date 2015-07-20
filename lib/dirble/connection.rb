@@ -4,7 +4,7 @@ require 'typhoeus/adapters/faraday'
 
 module Dirble
   class Connection
-    DIRBLE_API_URL = 'http://api.dirble.com/v1'
+    DIRBLE_API_URL = 'http://api.dirble.com/v2'
 
     def exec_query(query_params)
       QueryExecuter.new(connection, query_params).execute

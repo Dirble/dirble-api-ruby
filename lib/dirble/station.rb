@@ -17,7 +17,6 @@ module Dirble
       self.country = options[:country]
       self.bitrate = options[:bitrate]
       self.status = options[:status]
-      self.song_history = Array(options[:songhistory])
     end
 
     private
@@ -27,40 +26,31 @@ module Dirble
     end
 
     class << self
-      def create(params)
-        guard_creation_of_station(params)
-        call_api_with_results(
-          request_type: :post,
-          query: 'station/apikey/{{api_key}}',
-          form_fields: params
-        ).first
-      end
-
       def find(station_id)
         call_api_with_results(
           request_type: :get,
-          query: "station/apikey/{{api_key}}/id/#{station_id}"
+          query: "station/#{station_id}?token={{api_key}}"
         ).first
       end
 
       def search(keyword)
         call_api_with_results(
           request_type: :get,
-          query: "search/apikey/{{api_key}}/search/#{keyword.parameterize}"
-        )
-      end
-
-      def by_continent(name)
-        call_api_with_results(
-          request_type: :get,
-          query: "continent/apikey/{{api_key}}/continent/#{name.parameterize}"
+          query: "search/#{keyword.parameterize}?token={{api_key}}"
         )
       end
 
       def by_country(code)
         call_api_with_results(
           request_type: :get,
-          query: "country/apikey/{{api_key}}/country/#{code}"
+          query: "countries/#{code}/stations?token={{api_key}}"
+        )
+      end
+
+      def song_history(station_id)
+        call_api_with_results(
+          request_type: :get,
+          query: "station/#{station_id}/song_history?token={{api_key}}"
         )
       end
 
@@ -69,28 +59,6 @@ module Dirble
         by_country(code)
       end
 
-      def count
-        response = Dirble.connection.exec_query(
-          request_type: :get,
-          query: 'amountStation/apikey/{{api_key}}'
-        ).body
-        JSON.parse(response)['amount']
-      end
-
-      private
-
-      def guard_creation_of_station(params)
-        misssing_keys_for_creation unless all_required_fields?(params.keys)
-      end
-
-      def all_required_fields?(keys)
-        REQUIRED_FIELDS.all? { |required_field| keys.include?(required_field) }
-      end
-
-      def missing_keys_for_creation
-        fail ArgumentError,
-             'You forgot about one of this keys: name, website, directory'
-      end
     end
   end
 end

@@ -13,7 +13,7 @@ module Dirble
     def self.all
       call_api_with_results(
         request_type: :get,
-        query: 'categories/apikey/{{api_key}}'
+        query: 'categories/?token={{api_key}}'
       )
     end
 
@@ -28,7 +28,7 @@ module Dirble
     def self.primary
       call_api_with_results(
         request_type: :get,
-        query: 'primaryCategories/apikey/{{api_key}}',
+        query: 'categories/primary?token={{api_key}}',
         factory_klass: Dirble::PrimaryCategory
       )
     end
@@ -36,7 +36,7 @@ module Dirble
     def stations
       self.class.call_api_with_results(
         request_type: :get,
-        query: "stations/apikey/{{api_key}}/id/#{id}",
+        query: "category/#{id}/stations?token={{api_key}}",
         factory_klass: Dirble::Station
       )
     end

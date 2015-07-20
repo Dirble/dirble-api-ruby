@@ -8,7 +8,7 @@ module Dirble
     def children
       self.class.call_api_with_results(
         request_type: :get,
-        query: "childCategories/apikey/{{api_key}}/primaryid/#{id}",
+        query: "category/#{id}/childs?token={{api_key}}",
         factory_klass: Dirble::Category
       )
     end
